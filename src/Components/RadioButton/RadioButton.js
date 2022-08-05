@@ -8,18 +8,15 @@ import FormLabel from '@mui/material/FormLabel';
 export default function RadioButton() {
   return (
     <FormControl>
-      <FormLabel id="demo-row-radio-buttons-group-label" style={{marginLeft:"-330px"}}><b>Gender</b><sup style={{color:"red"}}>*</sup></FormLabel>
+      <FormLabel id="demo-radio-buttons-group-label">Gender</FormLabel>
       <RadioGroup
-        row
-        aria-labelledby="demo-row-radio-buttons-group-label"
-        name="row-radio-buttons-group"
-        style={{marginLeft:"-120px"}}
+        aria-labelledby="demo-radio-buttons-group-label"
+        defaultValue="female"
+        name="radio-buttons-group"
       >
-       
-        <FormControlLabel  value="female" control={<Radio />} label="Female" />
+        <FormControlLabel value="female" control={<Radio />} label="Female" />
         <FormControlLabel value="male" control={<Radio />} label="Male" />
         <FormControlLabel value="other" control={<Radio />} label="Other" />
-        
       </RadioGroup>
     </FormControl>
   );
