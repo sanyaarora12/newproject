@@ -1,7 +1,7 @@
 import React from "react";
 import "../App.css";
 import axios from "axios";
-import Form from "./Form";
+import Form1 from "./Form1";
 import { useState } from "react";
 function App() {
   const [showform, setShowform] = useState(false);
@@ -192,7 +192,7 @@ function App() {
         </button>
       </div>
 
-      {showform ? <Form /> : undefined}
+      {showform ? <Form1 /> : undefined}
     </div>
   );
 }

@@ -1,21 +1,24 @@
-import React, { useState } from "react";
-import { Container } from "@mui/system";
-import CssBaseline from "@mui/material/CssBaseline";
-import { Button, Grid, Input, Paper, TextField } from "@mui/material";
-import DatePickers from "../Components/DatePicker/DatePickers";
-import RadioButton from "../Components/RadioButton/RadioButton";
-import Inputs from "../Components/Input/Inputs";
-import Checkboxes from "../Components/Checkbox/Checkboxes";
-import Popup from "./Popup";
+import * as React from "react";
+import { useState } from "react";
+import Button from "@mui/material/Button";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import CssBaseline from "@mui/material/CssBaseline";
+import TextField from "@mui/material/TextField";
+import { Grid, Paper } from "@mui/material";
+import Box from "@mui/material/Box";
+import Container from "@mui/material/Container";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import Validations from "./Validation";
+import Inputs from "../Components/Input/Inputs";
+import RadioButton from "../Components/RadioButton/RadioButton";
 
-export default function Form() {
-  const [formValues, setFormValues] = useState({ name: "", phonenumber: "" });
-  const [formErrors, setFormErrors] = useState({});
-  const [isSubmit, setIsSubmit] = useState(false);
-  const [buttonPopup, setButtonPopup] = useState(false);
+const theme = createTheme();
 
+export default function Form1() {
+  let navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    phonenumber: "",
+  });
   const [form, setForm] = useState({
     id: 3,
     name: "JIO DIGITAL DEAL DAYS",
@@ -207,44 +210,17 @@ export default function Form() {
     },
   });
 
-  // const handleChange = (e, n) => {
-  //   let updatedValue = { ...formValues };
-  //   updatedValue[n] = e.target.value;
-  //   setFormValues(updatedValue);
-  // };
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const errors = Validations(formData);
+    setFormData({ ...formData, errors });
+    if (!Object.keys(errors).length) {
+    }
+  };
 
   const handleChange = (e) => {
-    const { n, value } = e.target;
-    setFormValues({ ...formValues, [n]: value });
-  };
-
-  const navigate = useNavigate();
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setFormErrors(validate(formValues));
-    setIsSubmit(true);
-  };
-
-  React.useEffect(() => {
-    if (Object.keys(formErrors).length === 0 && isSubmit) {
-      console.log(formValues);
-      setButtonPopup(true);
-    }
-  }, []);
-
-  const validate = (values) => {
-    const errors = {};
-
-    if (!values.name) {
-      errors.name = "Name is required!";
-    }
-    if (!values.phonenumber) {
-      errors.phonenumber = "Phone number is required!";
-    } else if (values.phonenumber.length < 10) {
-      errors.phonenumber = "phonenumber needs to be 6 characters or more";
-    }
-    return errors;
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
   };
 
   const result = () => {
@@ -258,97 +234,108 @@ export default function Form() {
                 <strong>{item.key}</strong>
               </label>
               <br />
-              <Inputs
-                type="text"
+
+              <TextField
+                margin="normal"
                 required
-                defaultValue={formValues.phonenumber}
+                fullWidth
+                name="phonenumber"
                 onChange={handleChange}
+                label="Phone Number"
+                id="phoneNumber"
+                autoComplete="phoneNumber"
+                error={formData?.errors?.phonenumber?.length > 0 ? true : false}
               />
-              <p style={{ color: "red" }}>{formErrors.phonenumber}</p>
             </div>
           );
           break;
-        // case "TextBox":
-        //   console.log("a");
-        //   final.push(
-        //     <div>
-        //       <label>
-        //         <strong>{item.key}</strong>
-        //       </label>
-        //       <br />
-        //       <Inputs
-        //         type="text"
-        //         required
-        //         name={item.name}
-        //         defaultValue={formValues.name}
-        //         onChange={handleChange}
-        //       />
-        //       <p style={{ color: "red" }}>{formErrors.name}</p>
-        //     </div>
-        //   );
-        //   break;
-        // case "RadioGroup":
-        //   final.push(
-        //     <label>
-        //       <strong>{item.key}</strong>
-        //     </label>
-        //   );
-        //   item.options.map((radioitem) => {
-        //     final.push(
-        //       <div>
-        //         <RadioButton
-        //           key={item.key}
-        //           title={item.title}
-        //           handleChange={handleChange}
-        //         />
-        //         {radioitem.title}
-        //       </div>
-        //     );
-        //   });
-        //   break;
+        case "RadioGroup":
+          final.push(
+            <label>
+              <strong>{item.key}</strong>
+            </label>
+          );
+          item.options.map((radioitem) => {
+            final.push(
+              <div>
+                <RadioButton
+                  key={item.key}
+                  title={item.title}
+                  handleChange={handleChange}
+                />
+                {radioitem.title}
+              </div>
+            );
+          });
+          break;
+        case "MultiCheckBox":
+          final.push(
+            <label>
+              <strong>{item.key}</strong>
+            </label>
+          );
 
-        // case "MultiCheckBox":
-        //   final.push(
-        //     <label>
-        //       <strong>{item.key}</strong>
-        //     </label>
-        //   );
+          item.options.map((multicheckbox) => {
+            final.push(
+              <div>
+                <input type="checkbox" />
+                {multicheckbox.title}
+              </div>
+            );
+          });
+          break;
 
-        //   item.options.map((multicheckbox) => {
-        //     final.push(
-        //       <div>
-        //         <input type="checkbox" />
-        //         {multicheckbox.title}
-        //       </div>
-        //     );
-        //   });
-        //   break;
         default:
           console.log("b");
       }
       console.log(final);
+      console.log(formData)
     });
     return final;
   };
 
   const paperStyle = { padding: 20, height: "120vh", width: 600 };
+
   return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <Paper elevation={10} style={paperStyle}>
-        <Grid align="center">
-          <h3 style={{ marginLeft: "-250px" }}>
-            <u>Form</u>
-          </h3>
-          {result()}
-        </Grid>
-        <br />
-        <Button onClick={handleSubmit} style={{ marginLeft: "150px" }}>
-          Submit
-        </Button>
-        {/* <button onClick={() => setButtonPopup(true)}>Click me</button> */}
-        <Popup trigger={buttonPopup} setTrigger={setButtonPopup}></Popup>
-      </Paper>
-    </Container>
+    <ThemeProvider theme={theme}>
+      <Container component="main" maxWidth="xs">
+        <CssBaseline />
+        <form>
+          <Paper elevation={10} style={paperStyle}>
+            <Grid align="center">
+              <h3 style={{ marginLeft: "-450px" }}>
+                <u>Form</u>
+              </h3>
+            </Grid>
+            <Box
+              sx={{
+                marginTop: 8,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+              }}
+            >
+              <Box
+                component="form"
+                onSubmit={handleSubmit}
+                noValidate
+                sx={{ mt: 1 }}
+              >
+                {result()}
+                <Button
+                  type="submit"
+                  fullWidth
+                  variant="contained"
+                  sx={{ mt: 3, mb: 2 }}
+                  onClick={handleSubmit}
+                >
+                  SUBMIT
+                </Button>
+              </Box>
+            </Box>
+          </Paper>
+        </form>
+      </Container>
+    </ThemeProvider>
   );
 }
