@@ -1,8 +1,8 @@
 import React from "react";
-import "./App.css";
+import "../App.css";
 import axios from "axios";
 import Form from "./Form";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 function App() {
   const [showform, setShowform] = useState(false);
   const [card, setCard] = useState([

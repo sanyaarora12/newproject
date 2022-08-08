@@ -5,7 +5,9 @@ export default function Checkboxes() {
   return (
     <div>
       
-      <Checkbox />
+      <Checkbox
+      
+      />
       
     </div>
   );

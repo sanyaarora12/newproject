@@ -10,12 +10,11 @@ export default function RadioButton({ key, title, handleChange }) {
     <FormControl>
       <FormLabel id="demo-radio-buttons-group-label">{title}</FormLabel>
       <RadioGroup
-        row
+       
         aria-labelledby="demo-radio-buttons-group-label"
         defaultValue="female"
         name="radio-buttons-group"
       >
-     
         <FormControlLabel
           value={title}
           control={<Radio />}

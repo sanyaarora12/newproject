@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { Container } from "@mui/system";
 import CssBaseline from "@mui/material/CssBaseline";
 import { Button, Grid, Input, Paper, TextField } from "@mui/material";
-import DatePickers from "./Components/DatePicker/DatePickers";
-import RadioButton from "./Components/RadioButton/RadioButton";
-import Inputs from "./Components/Input/Inputs";
-import Checkboxes from "./Components/Checkbox/Checkboxes";
+import DatePickers from "../Components/DatePicker/DatePickers";
+import RadioButton from "../Components/RadioButton/RadioButton";
+import Inputs from "../Components/Input/Inputs";
+import Checkboxes from "../Components/Checkbox/Checkboxes";
 
 export default function Form() {
   const [formValues, setFormValues] = useState({ name: "", phonenumber: "" });
@@ -256,7 +256,7 @@ export default function Form() {
               </label>
               <br />
 
-              <TextField
+              <Inputs
                 type="text"
                 required
                 name="name"
@@ -275,16 +275,7 @@ export default function Form() {
                 <strong>{item.key}</strong>
               </label>
               <br />
-              {/* <Inputs
-                name={item.name}
-                onChange={(e) => handleChange(e, item.key)}
-              /> */}
-              {/* <TextField
-                type="text"
-                name={item.name}
-                onChange={(e) => handleChange(e, item.key)}
-              /> */}
-              <TextField
+              <Inputs
                 type="text"
                 required
                 name={item.name}
@@ -296,12 +287,14 @@ export default function Form() {
           );
           break;
         case "RadioGroup":
+          final.push(
+            <label>
+                <strong>{item.key}</strong>
+              </label> 
+          )
           item.options.map((radioitem) => {
             final.push(
               <div>
-                {/* <label>
-                <strong>{item.key}</strong>
-              </label> */}
                 <RadioButton
                   key={item.key}
                   title={item.title}
@@ -314,12 +307,18 @@ export default function Form() {
           break;
 
         case "MultiCheckBox":
+          final.push(
+            <label>
+                <strong>{item.key}</strong>
+              </label> 
+          )
+          
           item.options.map((multicheckbox) => {
             final.push(
-              <label>
+              <div >
                 <input type="checkbox" />
                 {multicheckbox.title}
-              </label>
+              </div>
             );
           });
           break;
@@ -331,7 +330,7 @@ export default function Form() {
     return final;
   };
 
-  const paperStyle = { padding: 20, height: "90vh", width: 600 };
+  const paperStyle = { padding: 20, height: "120vh", width: 600 };
   return (
     <Container component="main" maxWidth="xs">
       <CssBaseline />
