@@ -8,7 +8,10 @@ import Inputs from "./Components/Input/Inputs";
 import Checkboxes from "./Components/Checkbox/Checkboxes";
 
 export default function Form() {
-  const [formValues, setFormValues] = useState({});
+  const [formValues, setFormValues] = useState({ name: "", phonenumber: "" });
+  const [formErrors, setFormErrors] = useState({});
+  const [isSubmit, setIsSubmit] = useState(false);
+
   const [form, setForm] = useState({
     id: 3,
     name: "JIO DIGITAL DEAL DAYS",
@@ -200,53 +203,70 @@ export default function Form() {
     },
   });
 
-  const handleChange = (e, n) => {
-    let updatedValue = { ...formValues };
-    updatedValue[n] = e.target.value;
-    setFormValues(updatedValue);
+  // const handleChange = (e, n) => {
+  //   let updatedValue = { ...formValues };
+  //   updatedValue[n] = e.target.value;
+  //   setFormValues(updatedValue);
+  // };
+  const handleChange = (e) => {
+    const { n, value } = e.target;
+    setFormValues({ ...formValues, [n]: value });
   };
 
-  function validatePhoneNumber(input_str) {
-    var re = /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/;
-
-    return re.test(input_str);
-  }
-  const onSubmit = () => {
-    let obj = {
-      mobile: "998005727",
-      email: "danishtoall@gmailcom",
-      name: "danish",
-      gender: "male",
-    };
-
-    let flag = true;
-    let validationobj = {};
-    Object.keys(obj).forEach((key) => {
-      if (key === "mobile") {
-        if (!validatePhoneNumber(obj[key])) {
-          validationobj[key] = true;
-        }
-      } else if (key === "email") {
-        if (!validateEmail(obj[key])) {
-          validationobj[key] = true;
-        }
-      } else {
-        if (obj[key] === "") {
-          flag = false;
-          validationobj[key] = true;
-        }
-      }
-    });
-    console.log(validationobj, "validationobj", flag, "flag");
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setFormErrors(validate(formValues));
+    setIsSubmit(true);
   };
 
-  onSubmit();
+  React.useEffect(() => {
+    console.log(formErrors);
+    if (Object.keys(formErrors).length === 0 && isSubmit) {
+      console.log(formValues);
+    }
+  });
+
+  const validate = (values) => {
+    const errors = {};
+
+    if (!values.name) {
+      errors.name = "Name is required!";
+    }
+    if (
+      !values.phonenumber ||
+      values.phonenumber === "" ||
+      values.phonenumber.length > 10
+    ) {
+      errors.phonenumber = "Phone number is required!";
+    } else if (values.phonenumber.length < 10) {
+      errors.phonenumber = "phonenumber needs to be 6 characters or more";
+    }
+    return errors;
+  };
 
   const result = () => {
     let final = [];
     form.formId.fields.map((item) => {
       switch (String(item.type)) {
         case "ContactNumber":
+          final.push(
+            <div>
+              <label>
+                <strong>{item.key}</strong>
+              </label>
+              <br />
+
+              <TextField
+                type="text"
+                required
+                name="name"
+                defaultValue={formValues.phonenumber}
+                onChange={handleChange}
+              />
+              <p style={{ color: "red" }}>{formErrors.phonenumber}</p>
+            </div>
+          );
+          break;
         case "TextBox":
           console.log("a");
           final.push(
@@ -255,15 +275,23 @@ export default function Form() {
                 <strong>{item.key}</strong>
               </label>
               <br />
-              <Inputs
+              {/* <Inputs
                 name={item.name}
                 onChange={(e) => handleChange(e, item.key)}
-              />
+              /> */}
               {/* <TextField
                 type="text"
                 name={item.name}
                 onChange={(e) => handleChange(e, item.key)}
               /> */}
+              <TextField
+                type="text"
+                required
+                name={item.name}
+                defaultValue={formValues.name}
+                onChange={handleChange}
+              />
+              <p style={{ color: "red" }}>{formErrors.name}</p>
             </div>
           );
           break;
@@ -316,7 +344,9 @@ export default function Form() {
             {result()}
           </Grid>
           <br />
-          <Button style={{ marginLeft: "150px" }}>Submit</Button>
+          <Button onClick={handleSubmit} style={{ marginLeft: "150px" }}>
+            Submit
+          </Button>
         </Paper>
       </form>
     </Container>
