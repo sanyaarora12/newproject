@@ -17,6 +17,7 @@ const theme = createTheme();
 export default function Form1() {
   let navigate = useNavigate();
   const [formData, setFormData] = useState({
+    
     phonenumber: "",
   });
   const [form, setForm] = useState({
@@ -210,11 +211,14 @@ export default function Form1() {
     },
   });
 
+  const [checked, setChecked] = useState(true);
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const errors = Validations(formData);
     setFormData({ ...formData, errors });
     if (!Object.keys(errors).length) {
+      
     }
   };
 
@@ -239,16 +243,16 @@ export default function Form1() {
                 margin="normal"
                 required
                 fullWidth
-                name="phonenumber"
+                name={item.key}
                 onChange={handleChange}
-                label="Phone Number"
-                id="phoneNumber"
-                autoComplete="phoneNumber"
-                error={formData?.errors?.phonenumber?.length > 0 ? true : false}
+                label={item.type}
+                // error={formData?.errors?.?.length > 0 ? true : false}
               />
+              
             </div>
-          );
+          )
           break;
+         
         case "RadioGroup":
           final.push(
             <label>
@@ -278,7 +282,7 @@ export default function Form1() {
           item.options.map((multicheckbox) => {
             final.push(
               <div>
-                <input type="checkbox" />
+                <input type="checkbox" onChange={() => setChecked(!checked)} />
                 {multicheckbox.title}
               </div>
             );
@@ -289,7 +293,7 @@ export default function Form1() {
           console.log("b");
       }
       console.log(final);
-      console.log(formData)
+      console.log(formData);
     });
     return final;
   };

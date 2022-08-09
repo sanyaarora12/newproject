@@ -268,61 +268,61 @@ export default function Form() {
             </div>
           );
           break;
-        // case "TextBox":
-        //   console.log("a");
-        //   final.push(
-        //     <div>
-        //       <label>
-        //         <strong>{item.key}</strong>
-        //       </label>
-        //       <br />
-        //       <Inputs
-        //         type="text"
-        //         required
-        //         name={item.name}
-        //         defaultValue={formValues.name}
-        //         onChange={handleChange}
-        //       />
-        //       <p style={{ color: "red" }}>{formErrors.name}</p>
-        //     </div>
-        //   );
-        //   break;
-        // case "RadioGroup":
-        //   final.push(
-        //     <label>
-        //       <strong>{item.key}</strong>
-        //     </label>
-        //   );
-        //   item.options.map((radioitem) => {
-        //     final.push(
-        //       <div>
-        //         <RadioButton
-        //           key={item.key}
-        //           title={item.title}
-        //           handleChange={handleChange}
-        //         />
-        //         {radioitem.title}
-        //       </div>
-        //     );
-        //   });
-        //   break;
+        case "TextBox":
+          console.log("a");
+          final.push(
+            <div>
+              <label>
+                <strong>{item.key}</strong>
+              </label>
+              <br />
+              <Inputs
+                type="text"
+                required
+                name={item.name}
+                defaultValue={formValues.name}
+                onChange={handleChange}
+              />
+              <p style={{ color: "red" }}>{formErrors.name}</p>
+            </div>
+          );
+          break;
+        case "RadioGroup":
+          final.push(
+            <label>
+              <strong>{item.key}</strong>
+            </label>
+          );
+          item.options.map((radioitem) => {
+            final.push(
+              <div>
+                <RadioButton
+                  key={item.key}
+                  title={item.title}
+                  handleChange={handleChange}
+                />
+                {radioitem.title}
+              </div>
+            );
+          });
+          break;
 
-        // case "MultiCheckBox":
-        //   final.push(
-        //     <label>
-        //       <strong>{item.key}</strong>
-        //     </label>
-        //   );
+        case "MultiCheckBox":
+          final.push(
+            <label>
+              <strong>{item.key}</strong>
+            </label>
+          );
 
-        //   item.options.map((multicheckbox) => {
-        //     final.push(
-        //       <div>
-        //         <input type="checkbox" />
-        //         {multicheckbox.title}
-        //       </div>
-        //     );
-        //   });
-        //   break;
+          item.options.map((multicheckbox) => {
+            final.push(
+              <div>
+                <input type="checkbox" />
+                {multicheckbox.title}
+              </div>
+            );
+          });
+          break;
         default:
           console.log("b");
       }
