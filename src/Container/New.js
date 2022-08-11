@@ -5,7 +5,7 @@ import Form from "./Form";
 import { useState } from "react";
 import {Link } from "react-router-dom";
 
-function App() {
+function New() {
   const [showform, setShowform] = useState(false);
   const [card, setCard] = useState([
     {
@@ -158,7 +158,7 @@ function App() {
         <div class="carousel-inner">
           {card.map((cards) => (
             <div class="carousel-item active" id="car">
-              <Link to="/1">
+              <Link to="/form">
               <img
                 src={cards.desktopImageUrl}
                 class="d-block w-80 "
@@ -196,9 +196,9 @@ function App() {
         </button>
       </div>
     
-      {showform ? <Form /> : undefined}
+       <Form />
     </div>
   );
 }
 
-export default App;
+export default New;

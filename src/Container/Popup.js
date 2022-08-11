@@ -2,7 +2,6 @@ import React from "react";
 import "./Popup.css";
 import { Link } from "react-router-dom";
 
-
 function Popup(props) {
   return props.trigger ? (
     <div className="popup">

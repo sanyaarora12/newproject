@@ -18,7 +18,7 @@ export default function RadioButton({ key, title, handleChange }) {
         <FormControlLabel
           value={title}
           control={<Radio />}
-          onChange={(e) => handleChange(e, key)}
+         
         />
       </RadioGroup>
     </FormControl>

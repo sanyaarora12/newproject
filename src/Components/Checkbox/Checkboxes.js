@@ -1,10 +1,10 @@
 import * as React from "react";
 import Checkbox from "@mui/material/Checkbox";
 
-export default function Checkboxes() {
+export default function Checkboxes({title}) {
   return (
     <div>
-      <Checkbox />
+      <Checkbox  />{title}
     </div>
   );
 }

@@ -1,11 +1,14 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 
-export default function Inputs() {
+export default function Inputs(handleChange,key) {
   return (
     
-      <TextField id="outlined-basic"  variant="outlined" />
+      <TextField
+       id="outlined-basic"
+       variant="outlined"
+       onChange={(e) => handleChange(e, key)}
+      />
       
     
   );
