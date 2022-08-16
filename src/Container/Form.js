@@ -6,14 +6,18 @@ import RadioButton from "../Components/RadioButton/RadioButton";
 import Checkboxes from "../Components/Checkbox/Checkboxes";
 import Box from "@mui/material/Box";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { dummy } from "./data";
-import Popup from "./Popup";
 
+import Popup from "./Popup";
+import axios from "axios";
+import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 export default function Form() {
+  let { id } = useParams();
+  let navigate = useNavigate();
   const [formValues, setFormValues] = useState({ name: "", phonenumber: "" });
 
   const [form, setForm] = useState({});
-  const[buttonPopup,setButtonPopup]=useState(false)
+  const [buttonPopup, setButtonPopup] = useState(false);
 
   function validateEmail(email) {
     var re = /\S+@\S+\.\S+/;
@@ -47,27 +51,47 @@ export default function Form() {
       }
     });
     console.log(validationobj1, "validationobj1", flag, "flag");
-    
   };
 
   useEffect(() => {
     // we will call an api here
-    const temp = fetchPromotionDetails();
-    console.log(temp, "mounted");
-    setForm(temp);
+    // have to get form id from url and have to pass in this func
+
+    fetchPromotionDetails(id).then((temp) => {
+      console.log(temp, "mounted");
+      setForm(temp);
+    });
   }, []);
 
-  const fetchPromotionDetails = () => {
+  const fetchPromotionDetails = async (id) => {
     // you will call AN api here and will return the updated response
-    var res = dummy;
+
+    const resp = await axios
+      .get(
+        `https://jio-clickstream-product-suggestion.extensions.jiox0.de/api/promotions/url/jddefghtj${id}/full`
+      )
+      .catch((err) => {
+        console.log(err.res.status);
+        if (err.res.status === 404) {
+          navigate("/Page404");
+          return;
+        }
+      });
+
+    let res = resp.data;
+
     let newFields = res.formId.fields.map((item) => {
       return {
         ...item,
+
         showError: false,
+
         errorLabel: "invalid input!",
       };
     });
+
     res.formId.fields = newFields;
+
     return res;
   };
 
@@ -99,7 +123,6 @@ export default function Form() {
     updatedValue[n] = e.target.value;
     console.log(updatedValue, "updatedvalue");
     setFormValues(updatedValue);
-    
   };
 
   const result = () => {
@@ -217,7 +240,7 @@ export default function Form() {
   };
 
   const theme = createTheme();
-  const paperStyle = { padding: 20, height: "180vh", width: 600 };
+  const paperStyle = { padding: 20, height: "auto", width: 600 };
 
   return (
     <ThemeProvider theme={theme}>
@@ -228,8 +251,11 @@ export default function Form() {
           <Grid align="center">
             <h3 style={{ marginLeft: "-450px" }}>
               <u>Form</u>
-              <br/><br/>
-              <h5 style={{ marginLeft: "150px" }}><strong>Promotion Lead Capture</strong></h5>
+              <br />
+              <br />
+              <h5 style={{ marginLeft: "150px" }}>
+                <strong>Promotion Lead Capture</strong>
+              </h5>
             </h3>
           </Grid>
           <Box
@@ -252,9 +278,8 @@ export default function Form() {
             >
               SUBMIT
             </Button>
-           
-                <Popup trigger={buttonPopup} setTrigger={setButtonPopup} />
-        
+
+            <Popup trigger={buttonPopup} setTrigger={setButtonPopup} />
           </Box>
         </Paper>
       </Container>
