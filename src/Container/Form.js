@@ -35,23 +35,7 @@ export default function Form() {
     return re.test(input_str);
   }
 
-  const onSubmit = () => {
-    let flag = true;
-    let validationobj1 = {};
-    form.formId.fields.forEach((i) => {
-      if (i.type === "ContactNumber") {
-        if (!validatePhoneNumber(i.type)) {
-          validationobj1[i] = true;
-          flag = false;
-        } else {
-          validationobj1[i] = false;
-          flag = true;
-          
-        }
-      }
-    });
-    console.log(validationobj1, "validationobj1", flag, "flag");
-  };
+
 
   useEffect(() => {
     // we will call an api here
@@ -83,15 +67,11 @@ export default function Form() {
     let newFields = res.formId.fields.map((item) => {
       return {
         ...item,
-
         showError: false,
-
         errorLabel: "invalid input!",
       };
     });
-
     res.formId.fields = newFields;
-
     return res;
   };
 
@@ -120,12 +100,11 @@ export default function Form() {
       } else {
         updatedValue.formId.fields[n].showError = true;
       }
-      
     }
     updatedValue[n] = e.target.value;
     console.log(updatedValue, "updatedvalue");
     setFormValues(updatedValue);
-    
+   
   };
 
   const result = () => {
@@ -279,7 +258,7 @@ export default function Form() {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
-              onClick={()=>setButtonPopup(true)}
+              onClick={handleChange}
             >
               SUBMIT
             </Button>
