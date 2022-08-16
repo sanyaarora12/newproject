@@ -18,16 +18,15 @@ function App() {
         setCard(res.data);
       })
       .catch((err) => {
-        console.log(err.res.status);
-        if (err.res.status === 404) {
-          navigate("/Page404");
-          return;
-        }
+        console.log(err);
+        // if (err.res.status === 404) {
+        //   navigate("/Page404");
+
+        //   return;
+        // }
       });
   }, []);
-  // const ErrorPage = () => {
-  //   navigate("/Page404");
-  // };
+
   return (
     <div>
       <div

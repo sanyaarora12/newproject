@@ -46,7 +46,7 @@ export default function Form() {
         } else {
           validationobj1[i] = false;
           flag = true;
-          setButtonPopup(true);
+          
         }
       }
     });
@@ -71,7 +71,7 @@ export default function Form() {
         `https://jio-clickstream-product-suggestion.extensions.jiox0.de/api/promotions/url/jddefghtj${id}/full`
       )
       .catch((err) => {
-        console.log(err.res.status);
+        console.log("err");
         if (err.res.status === 404) {
           navigate("/Page404");
           return;
@@ -102,6 +102,7 @@ export default function Form() {
       const validate = validatePhoneNumber(e.target.value);
       if (validate) {
         updatedValue.formId.fields[n].showError = false;
+        
       } else {
         updatedValue.formId.fields[n].showError = true;
       }
@@ -119,16 +120,18 @@ export default function Form() {
       } else {
         updatedValue.formId.fields[n].showError = true;
       }
+      
     }
     updatedValue[n] = e.target.value;
     console.log(updatedValue, "updatedvalue");
     setFormValues(updatedValue);
+    
   };
 
   const result = () => {
     let final = [];
 
-    form?.formId?.fields.map((item, index) => {
+    form?.formId?.fields.forEach((item, index) => {
       switch (String(item.type)) {
         case "ContactNumber":
           final.push(
@@ -140,6 +143,7 @@ export default function Form() {
               <TextField
                 type="text"
                 required
+                fullWidth
                 label={item.type}
                 onChange={(e) => handleChange(e, index, item.type)}
               />
@@ -159,6 +163,7 @@ export default function Form() {
               <TextField
                 type="text"
                 required
+                fullWidth
                 label={item.type}
                 onChange={(e) => handleChange(e, index, item.type)}
               />
@@ -196,7 +201,7 @@ export default function Form() {
           item.options.map((radioitem) => {
             final.push(
               <div>
-                <RadioButton key={item.key} title={item.title} />
+                <input type="radio" key={item.key} title={item.title} />
                 {radioitem.title}
               </div>
             );
@@ -274,7 +279,7 @@ export default function Form() {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
-              onClick={onSubmit}
+              onClick={()=>setButtonPopup(true)}
             >
               SUBMIT
             </Button>
