@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-export default function App({ title }) {
+export default function Dropdown({ title }) {
   const [value, setValue] = useState();
 
   const handleChange = (e) => {
@@ -9,8 +9,8 @@ export default function App({ title }) {
 
   return (
     <div>
-      <select value={value} onChange={handleChange}>
-        <option value={title}>{title}</option>
+      <select title={title} onChange={handleChange}>
+       
       </select>
 
       {/* <p>{` ${value}`}</p> */}

@@ -1,10 +1,11 @@
 import * as React from "react";
 import Checkbox from "@mui/material/Checkbox";
 
-export default function Checkboxes({title}) {
+export default function Checkboxes({ title, handleChange, value }) {
   return (
     <div>
-      <Checkbox  />{title}
+      <Checkbox name={title} checked={value} onChange={handleChange} />
+      {title}
     </div>
   );
 }

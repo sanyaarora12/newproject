@@ -8,7 +8,9 @@ import { useNavigate } from "react-router-dom";
 function App() {
   const [showform, setShowform] = useState(false);
   const [card, setCard] = useState([]);
+
   let navigate = useNavigate();
+  
   useEffect(() => {
     axios
       .get(
@@ -20,9 +22,7 @@ function App() {
       .catch((err) => {
         console.log(err);
         // if (err.res.status === 404) {
-        //   navigate("/Page404");
-
-        //   return;
+        //   return navigate("/Page404");
         // }
       });
   }, []);

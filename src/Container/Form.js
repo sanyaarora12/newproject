@@ -14,7 +14,11 @@ import { useNavigate } from "react-router-dom";
 export default function Form() {
   let { id } = useParams();
   let navigate = useNavigate();
-  const [formValues, setFormValues] = useState({ name: "", phonenumber: "" });
+  const [formValues, setFormValues] = useState({
+    ContactNumber: "",
+    ContactMail: "",
+    Name: "",
+  });
 
   const [form, setForm] = useState({});
   const [buttonPopup, setButtonPopup] = useState(false);
@@ -35,7 +39,43 @@ export default function Form() {
     return re.test(input_str);
   }
 
+  const onSubmit = () => {
+    let arr = [];
 
+    let obj = {
+      valueStr: "",
+
+      fieldKey: {
+        id: "",
+      },
+    };
+    console.log(formValues);
+
+    // apiSubmit();
+  };
+
+  const apiSubmit = (e) => {
+    console.log("came here");
+
+    axios
+
+      .post(
+        "https://jio-clickstream-product-suggestion.extensions.jiox0.de/i/form-submissions-full",
+        {
+          Name: formValues.Name,
+
+          ContactMail: formValues.ContactMail,
+
+          ContactNumber: formValues.ContactNumber,
+        }
+      )
+
+      .then((res) => {
+        console.log(res.data);
+      })
+
+      .catch((err) => console.error(err));
+  };
 
   useEffect(() => {
     // we will call an api here
@@ -50,39 +90,61 @@ export default function Form() {
   const fetchPromotionDetails = async (id) => {
     // you will call AN api here and will return the updated response
 
-    const resp = await axios
-      .get(
-        `https://jio-clickstream-product-suggestion.extensions.jiox0.de/api/promotions/url/jddefghtj${id}/full`
-      )
-      .catch((err) => {
-        console.log("err");
-        if (err.res.status === 404) {
-          navigate("/Page404");
-          return;
-        }
-      });
+    const resp = await axios.get(
+      `https://jio-clickstream-product-suggestion.extensions.jiox0.de/api/promotions/url/jddefghtj${id}/full`
+    );
+    // .catch((err) => {
+    //   console.log(err.res.status);
+    //   if (err.res.status === 404) {
+    //     navigate("/Page404");
+    //     return;
+    //   }
+    // });
 
     let res = resp.data;
 
     let newFields = res.formId.fields.map((item) => {
-      return {
+      const newOptions = item.options.map((val) => {
+        return {
+          ...val,
+          isSelected: false,
+        };
+      });
+      item.options = newOptions;
+      const res = {
         ...item,
+
         showError: false,
+
         errorLabel: "invalid input!",
+        valueInput: "",
       };
+      return res;
     });
+
     res.formId.fields = newFields;
+
     return res;
   };
-
-  const handleChange = (e, n, type = "") => {
+  const handleOptions = (e, n, type = "", optionIndex) => {
     let updatedValue = { ...form };
 
+    if (type === "MultiCheckBox") {
+      updatedValue.formId.fields[n].options[optionIndex].isSelected =
+        e.target.value;
+    }
+    debugger;
+    console.log(updatedValue, "updatedvalue");
+    setFormValues(updatedValue);
+    console.log(updatedValue.formId.fields[n].valueInput);
+  };
+  const handleChange = (e, n, type = "") => {
+    let updatedValue = { ...form };
+    updatedValue.formId.fields[n].valueInput = e.target.value;
     if (type === "ContactNumber") {
       const validate = validatePhoneNumber(e.target.value);
       if (validate) {
         updatedValue.formId.fields[n].showError = false;
-        
       } else {
         updatedValue.formId.fields[n].showError = true;
       }
@@ -104,13 +166,13 @@ export default function Form() {
     updatedValue[n] = e.target.value;
     console.log(updatedValue, "updatedvalue");
     setFormValues(updatedValue);
-   
+    console.log(updatedValue.formId.fields[n].valueInput);
   };
 
   const result = () => {
     let final = [];
 
-    form?.formId?.fields.forEach((item, index) => {
+    form?.formId?.fields.map((item, index) => {
       switch (String(item.type)) {
         case "ContactNumber":
           final.push(
@@ -122,7 +184,6 @@ export default function Form() {
               <TextField
                 type="text"
                 required
-                fullWidth
                 label={item.type}
                 onChange={(e) => handleChange(e, index, item.type)}
               />
@@ -142,7 +203,6 @@ export default function Form() {
               <TextField
                 type="text"
                 required
-                fullWidth
                 label={item.type}
                 onChange={(e) => handleChange(e, index, item.type)}
               />
@@ -180,7 +240,12 @@ export default function Form() {
           item.options.map((radioitem) => {
             final.push(
               <div>
-                <input type="radio" key={item.key} title={item.title} />
+                <RadioButton
+                  handleChange={(e) => handleChange(e, index, item.key)}
+                  key={item.key}
+                  title={item.title}
+                  value={item.valueInput}
+                />
                 {radioitem.title}
               </div>
             );
@@ -193,10 +258,17 @@ export default function Form() {
               <strong>{item.key}</strong>
             </label>
           );
-          item.options.map((multicheckbox) => {
+          item.options.map((multicheckbox, optionIndex) => {
             final.push(
               <div>
-                <Checkboxes title={multicheckbox.title} />
+                <Checkboxes
+                  handleChange={(e) =>
+                    handleOptions(e, index, item.key, optionIndex)
+                  }
+                  title={multicheckbox.title}
+                  value={multicheckbox.isSelected}
+                  checked={multicheckbox.isSelected}
+                />
               </div>
             );
           });
@@ -210,13 +282,16 @@ export default function Form() {
           item.options.map((singlecheckbox) => {
             final.push(
               <div>
-                <Checkboxes title={singlecheckbox.title} />
+                <Checkboxes
+                  onChange={(e) => handleChange(e, index, item.key)}
+                  title={singlecheckbox.title}
+                />
               </div>
             );
           });
           break;
         default:
-          console.log("b");
+          console.log("default");
       }
       console.log(final);
     });
@@ -258,7 +333,7 @@ export default function Form() {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
-              onClick={handleChange}
+              onClick={onSubmit}
             >
               SUBMIT
             </Button>

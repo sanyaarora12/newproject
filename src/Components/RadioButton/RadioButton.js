@@ -5,12 +5,11 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
 
-export default function RadioButton({ key, title, handleChange }) {
+export default function RadioButton({ title, handleChange }) {
   return (
     <FormControl>
       <FormLabel id="demo-radio-buttons-group-label">{title}</FormLabel>
       <RadioGroup
-       
         aria-labelledby="demo-radio-buttons-group-label"
         defaultValue="female"
         name="radio-buttons-group"
@@ -18,7 +17,7 @@ export default function RadioButton({ key, title, handleChange }) {
         <FormControlLabel
           value={title}
           control={<Radio />}
-         
+          onChange={handleChange}
         />
       </RadioGroup>
     </FormControl>
