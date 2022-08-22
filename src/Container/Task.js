@@ -21,9 +21,9 @@ function App() {
       })
       .catch((err) => {
         console.log(err);
-        // if (err.res.status === 404) {
-        //   return navigate("/Page404");
-        // }
+        if (err.res.status === 404) {
+          return navigate("/Page404");
+        }
       });
   }, []);
 

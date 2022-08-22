@@ -11,8 +11,9 @@ import Popup from "./Popup";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import Dropdown from "../Components/Dropdown/Dropdown";
 
-export default function Form() {
+export default function Form({ date }) {
   let { id } = useParams();
   let navigate = useNavigate();
   const [formValues, setFormValues] = useState({
@@ -73,17 +74,15 @@ export default function Form() {
 
   const apiSubmit = (request) => {
     console.log("came here");
-
+    setButtonPopup(true);
     axios
       .post(
-        "https://jio-clickstream-product-suggestion.extensions.jiox0.de/i/form-submissions-full",
+        "https://jio-clickstream-product-suggestion.extensions.jiox0.de/api/form-submissions-full",
         request
       )
-
       .then((res) => {
         console.log(res.data);
       })
-
       .catch((err) => console.error(err));
   };
 
@@ -144,18 +143,46 @@ export default function Form() {
     // debugger
     return temp;
   };
-  const handleOptions = (e, n, type = "", optionIndex) => {
+  const handleOptions = (e, n, type = "", optionIndex = null) => {
     let updatedValue = { ...form };
-    console.log(e.target.checked);
 
-    if (type === "MultiCheckBox" || "SingleCheckBox") {
+    if (type === "MultiCheckBox" || type === "SingleCheckBox") {
       updatedValue.formId.fields[n].options[optionIndex].isSelected =
         e.target.checked;
 
       updatedValue.formId.fields[n].valueInput = checkBoxFields(
         updatedValue.formId.fields[n].options
       );
-    } else if (type === "RadioGroup") {
+    }
+    //  else if (type === "RadioGroup") {
+    //   updatedValue.formId.fields[n].options.forEach((element, ind) => {
+    //     if (ind === optionIndex) {
+    //       element.isSelected = true;
+    //       updatedValue.formId.fields[n].valueInput = e.target.value;
+    //     } else {
+    //       element.isSelected = false;
+    //     }
+    //   });
+    // }
+    else if (type === "RadioGroup") {
+      const currentOptions = updatedValue.formId.fields[n].options;
+      optionIndex = currentOptions.findIndex(
+        (val) => val.title === e.target.value
+      );
+      updatedValue.formId.fields[n].options.forEach((element, ind) => {
+        if (ind === optionIndex) {
+          element.isSelected = true;
+          updatedValue.formId.fields[n].valueInput = e.target.value;
+        } else {
+          element.isSelected = false;
+        }
+      });
+    }
+     else if (type === "SelectBox") {
+      const currentOptions = updatedValue.formId.fields[n].options;
+      optionIndex = currentOptions.findIndex(
+        (val) => val.title === e.target.value
+      );
       updatedValue.formId.fields[n].options.forEach((element, ind) => {
         if (ind === optionIndex) {
           element.isSelected = true;
@@ -169,6 +196,7 @@ export default function Form() {
     setFormValues(updatedValue);
     console.log(updatedValue.formId.fields[n].valueInput);
   };
+
   const handleChange = (e, n, type = "") => {
     let updatedValue = { ...form };
     updatedValue.formId.fields[n].valueInput = e.target.value;
@@ -193,12 +221,23 @@ export default function Form() {
       } else {
         updatedValue.formId.fields[n].showError = true;
       }
+    } else if (type === "DateBox") {
+      updatedValue.formId.fields[n].valueInput = e.target.value;
     }
     updatedValue[n] = e.target.value;
     console.log(updatedValue, "updatedvalue");
     setFormValues(updatedValue);
     console.log(updatedValue.formId.fields[n].valueInput);
   };
+
+  // const handleSelect=(e,item,n)=>{
+  //   let updatedValue = { ...form };
+  //   console.log(e,"e");
+  //   console.log(item,"item");
+  //   console.log(n,"n");
+  //   debugger
+  //   // updatedValue.formId.fields[n].valueInput = e.target.value;
+  // }
 
   const result = () => {
     let final = [];
@@ -248,44 +287,77 @@ export default function Form() {
         case "TextBox":
           final.push(
             <div>
+              <div>
+                <label>
+                  <strong>{item.key}</strong>
+                </label>
+                <br />
+                <TextField
+                  type="text"
+                  required
+                  fullWidth
+                  label={item.key}
+                  onChange={(e) => handleChange(e, index, item.key)}
+                />
+                {item.showError && (
+                  <div style={{ color: "red" }}>{item.errorLabel}</div>
+                )}
+              </div>
+              <br />
+            </div>
+          );
+          break;
+        case "DateBox":
+          final.push(
+            <div>
               <label>
                 <strong>{item.key}</strong>
               </label>
               <br />
               <TextField
-                type="text"
-                required
+                type="date"
                 fullWidth
-                label={item.key}
-                onChange={(e) => handleChange(e, index, item.key)}
+                value={date}
+                onChange={(e) => handleChange(e, index, item.type)}
               />
-              {item.showError && (
-                <div style={{ color: "red" }}>{item.errorLabel}</div>
-              )}
             </div>
           );
           break;
         case "RadioGroup":
+          // final.push(
+          //   <label>
+          //     <strong>{item.key}</strong>
+          //   </label>
+          // );
+          // item.options.map((radioitem, optionIndex) => {
+          //   final.push(
+          //     <div>
+          //       <RadioButton
+          //         handleChange={(e) =>
+          //           handleOptions(e, index, item.type, optionIndex)
+          //         }
+          //         value={radioitem.isSelected}
+          //         checked={radioitem.isSelected}
+          //         title={radioitem.title}
+          //       />
+          //     </div>
+          //   );
+          // });
           final.push(
-            <label>
-              <strong>{item.key}</strong>
-            </label>
-          );
-          item.options.map((radioitem, optionIndex) => {
-            final.push(
+            <>
+              <label>
+                <strong>{item.key}</strong>
+              </label>
               <div>
                 <RadioButton
-                  handleChange={(e) =>
-                    handleOptions(e, index, item.type, optionIndex)
-                  }
-                  key={item.key}
-                  title={item.title}
-                  value={item.title}
+                  handleChange={(e) => handleOptions(e, index, item.type)}
+                  options={item.options}
+                  item={item}
+                
                 />
-                {radioitem.title}
               </div>
-            );
-          });
+            </>
+          );
           break;
 
         case "MultiCheckBox":
@@ -330,16 +402,22 @@ export default function Form() {
             );
           });
           break;
-        case "DateBox":
+        case "SelectBox":
           final.push(
-            <div>
+            <>
               <label>
                 <strong>{item.key}</strong>
               </label>
-              <br />
-              <DatePickers />
-            </div>
+              <div>
+                <Dropdown
+                  handleChange={(e) => handleOptions(e, index, item.type)}
+                  options={item.options}
+                  item={item}
+                />
+              </div>
+            </>
           );
+
           break;
         default:
           console.log("default");
