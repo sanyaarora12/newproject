@@ -72,18 +72,30 @@ export default function Form({ date }) {
     apiSubmit(request);
   };
 
+  
+
   const apiSubmit = (request) => {
     console.log("came here");
-    setButtonPopup(true);
-    axios
-      .post(
+    // setButtonPopup(true);
+    axios.post(
         "https://jio-clickstream-product-suggestion.extensions.jiox0.de/api/form-submissions-full",
-        request
+        
+        request,
+        {
+         headers: {"Access-Control-Allow-Origin":true,
+          "Origin":
+             "https://jio-clickstream-product-suggestion.extensions.jiox0.de"
+        
+        }
+        }
+        
       )
       .then((res) => {
         console.log(res.data);
+        setButtonPopup(true);
       })
-      .catch((err) => console.error(err));
+      .catch((err) =>
+       console.error(err));
   };
 
   useEffect(() => {
@@ -102,6 +114,8 @@ export default function Form({ date }) {
     const resp = await axios.get(
       `https://jio-clickstream-product-suggestion.extensions.jiox0.de/api/promotions/url/jddefghtj${id}/full`
     );
+  
+    
     // .catch((err) => {
     //   console.log(err.res.status);
     //   if (err.res.status === 404) {
@@ -164,21 +178,7 @@ export default function Form({ date }) {
     //     }
     //   });
     // }
-    else if (type === "RadioGroup") {
-      const currentOptions = updatedValue.formId.fields[n].options;
-      optionIndex = currentOptions.findIndex(
-        (val) => val.title === e.target.value
-      );
-      updatedValue.formId.fields[n].options.forEach((element, ind) => {
-        if (ind === optionIndex) {
-          element.isSelected = true;
-          updatedValue.formId.fields[n].valueInput = e.target.value;
-        } else {
-          element.isSelected = false;
-        }
-      });
-    }
-     else if (type === "SelectBox") {
+     else if (type === "SelectBox" || type === "RadioGroup" ) {
       const currentOptions = updatedValue.formId.fields[n].options;
       optionIndex = currentOptions.findIndex(
         (val) => val.title === e.target.value
@@ -207,7 +207,7 @@ export default function Form({ date }) {
       } else {
         updatedValue.formId.fields[n].showError = true;
       }
-    } else if (type === "Name") {
+    } else if (type === "Name" || type === "name") {
       const validate = validateName(e.target.value);
       if (validate) {
         updatedValue.formId.fields[n].showError = false;
@@ -246,7 +246,7 @@ export default function Form({ date }) {
       switch (String(item.type)) {
         case "ContactNumber":
           final.push(
-            <div>
+            <div style={{marginBottom:"20px"}}>
               <label>
                 <strong>{item.key}</strong>
               </label>
@@ -266,7 +266,7 @@ export default function Form({ date }) {
           break;
         case "ContactMail":
           final.push(
-            <div>
+            <div style={{marginBottom:"20px"}}>
               <label>
                 <strong>{item.key}</strong>
               </label>
@@ -286,7 +286,7 @@ export default function Form({ date }) {
           break;
         case "TextBox":
           final.push(
-            <div>
+            <div style={{marginTop:"20px"}}>
               <div>
                 <label>
                   <strong>{item.key}</strong>
@@ -309,7 +309,7 @@ export default function Form({ date }) {
           break;
         case "DateBox":
           final.push(
-            <div>
+            <div style={{marginBottom:"20px"}}>
               <label>
                 <strong>{item.key}</strong>
               </label>
@@ -324,27 +324,8 @@ export default function Form({ date }) {
           );
           break;
         case "RadioGroup":
-          // final.push(
-          //   <label>
-          //     <strong>{item.key}</strong>
-          //   </label>
-          // );
-          // item.options.map((radioitem, optionIndex) => {
-          //   final.push(
-          //     <div>
-          //       <RadioButton
-          //         handleChange={(e) =>
-          //           handleOptions(e, index, item.type, optionIndex)
-          //         }
-          //         value={radioitem.isSelected}
-          //         checked={radioitem.isSelected}
-          //         title={radioitem.title}
-          //       />
-          //     </div>
-          //   );
-          // });
           final.push(
-            <>
+            <div style={{marginTop:"20px",marginBottom:"20px"}}>
               <label>
                 <strong>{item.key}</strong>
               </label>
@@ -356,10 +337,9 @@ export default function Form({ date }) {
                 
                 />
               </div>
-            </>
+            </div>
           );
           break;
-
         case "MultiCheckBox":
           final.push(
             <label>

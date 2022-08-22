@@ -18,7 +18,9 @@ function Popup(props) {
         </Link>
       </button>
       <button className="btn2"  onClick={() => props.setTrigger(false)}>
+      
         Submit again
+     
       </button>
       </div>
     </div>

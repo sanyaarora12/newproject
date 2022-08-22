@@ -21,12 +21,7 @@ export default function RadioButton({
         onChange={(e) => handleChange(e)}
         value={selectedValue}
       >
-        {/* <FormControlLabel
-          value={title}
-          control={<Radio />}
-          onChange={handleChange}
-          name={title} 
-        /> */}
+       
         {options.map((ele) => {
           return (
             <div style={{display:"flex"}}>
@@ -46,7 +41,7 @@ export default function RadioButton({
             </div>
           );
         })}
-        {/* <FormLabel style={{color:"black"}} id="demo-radio-buttons-group-label">{title}</FormLabel> */}
+       
       </RadioGroup>
     </FormControl>
   );
