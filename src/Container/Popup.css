@@ -8,20 +8,23 @@
     display:flex;
     justify-content: center;
     align-items: center;
+    
 }
 .popup-inner{
    position: relative;
    margin-top: -200px;
    padding:32px;
-   width: 500px;
+   width: 700px;
    height: 200px;
    max-width: 640px;
    background-color: white;
+   border-radius: 50px;
 }
 .popup-inner .close-btn{
     position: absolute;
     top:4px;
     right: 3px;
+    
     border: 0px;
 }
 .top{

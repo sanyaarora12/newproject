@@ -32,7 +32,6 @@ export default function Form({ date }) {
 
   function validatePhoneNumber(input_str) {
     var re = /^\(?(\d{3})\)?[- ]?(\d{3})[- ]?(\d{4})$/;
-
     return re.test(input_str);
   }
 
@@ -72,30 +71,28 @@ export default function Form({ date }) {
     apiSubmit(request);
   };
 
-  
-
   const apiSubmit = (request) => {
     console.log("came here");
-    // setButtonPopup(true);
-    axios.post(
-        "https://jio-clickstream-product-suggestion.extensions.jiox0.de/api/form-submissions-full",
-        
+    axios
+      .post(
+        "https://3fc4-2402-3a80-1fa7-7669-40ef-8373-1157-20f9.in.ngrok.io/api/form-submissions-full",
         request,
         {
-         headers: {"Access-Control-Allow-Origin":true,
-          "Origin":
-             "https://jio-clickstream-product-suggestion.extensions.jiox0.de"
-        
+          headers: {
+            "access-Control-Allow-Origin": true,
+            'access-Control-Allow-Methods': 'POST',
+            Origin:
+              "https://jio-clickstream-product-suggestion.extensions.jiox0.de",
+              
+          },
         }
-        }
-        
       )
       .then((res) => {
         console.log(res.data);
         setButtonPopup(true);
+       
       })
-      .catch((err) =>
-       console.error(err));
+      .catch((err) => console.error(err));
   };
 
   useEffect(() => {
@@ -114,8 +111,7 @@ export default function Form({ date }) {
     const resp = await axios.get(
       `https://jio-clickstream-product-suggestion.extensions.jiox0.de/api/promotions/url/jddefghtj${id}/full`
     );
-  
-    
+
     // .catch((err) => {
     //   console.log(err.res.status);
     //   if (err.res.status === 404) {
@@ -168,17 +164,8 @@ export default function Form({ date }) {
         updatedValue.formId.fields[n].options
       );
     }
-    //  else if (type === "RadioGroup") {
-    //   updatedValue.formId.fields[n].options.forEach((element, ind) => {
-    //     if (ind === optionIndex) {
-    //       element.isSelected = true;
-    //       updatedValue.formId.fields[n].valueInput = e.target.value;
-    //     } else {
-    //       element.isSelected = false;
-    //     }
-    //   });
-    // }
-     else if (type === "SelectBox" || type === "RadioGroup" ) {
+ 
+    else if (type === "SelectBox" || type === "RadioGroup") {
       const currentOptions = updatedValue.formId.fields[n].options;
       optionIndex = currentOptions.findIndex(
         (val) => val.title === e.target.value
@@ -230,15 +217,6 @@ export default function Form({ date }) {
     console.log(updatedValue.formId.fields[n].valueInput);
   };
 
-  // const handleSelect=(e,item,n)=>{
-  //   let updatedValue = { ...form };
-  //   console.log(e,"e");
-  //   console.log(item,"item");
-  //   console.log(n,"n");
-  //   debugger
-  //   // updatedValue.formId.fields[n].valueInput = e.target.value;
-  // }
-
   const result = () => {
     let final = [];
 
@@ -246,7 +224,7 @@ export default function Form({ date }) {
       switch (String(item.type)) {
         case "ContactNumber":
           final.push(
-            <div style={{marginBottom:"20px"}}>
+            <div style={{ marginBottom: "20px" }}>
               <label>
                 <strong>{item.key}</strong>
               </label>
@@ -266,7 +244,7 @@ export default function Form({ date }) {
           break;
         case "ContactMail":
           final.push(
-            <div style={{marginBottom:"20px"}}>
+            <div style={{ marginBottom: "20px" }}>
               <label>
                 <strong>{item.key}</strong>
               </label>
@@ -286,7 +264,7 @@ export default function Form({ date }) {
           break;
         case "TextBox":
           final.push(
-            <div style={{marginTop:"20px"}}>
+            <div style={{ marginTop: "20px" }}>
               <div>
                 <label>
                   <strong>{item.key}</strong>
@@ -309,7 +287,7 @@ export default function Form({ date }) {
           break;
         case "DateBox":
           final.push(
-            <div style={{marginBottom:"20px"}}>
+            <div style={{ marginBottom: "20px" }}>
               <label>
                 <strong>{item.key}</strong>
               </label>
@@ -325,7 +303,7 @@ export default function Form({ date }) {
           break;
         case "RadioGroup":
           final.push(
-            <div style={{marginTop:"20px",marginBottom:"20px"}}>
+            <div style={{ marginTop: "20px", marginBottom: "20px" }}>
               <label>
                 <strong>{item.key}</strong>
               </label>
@@ -334,7 +312,6 @@ export default function Form({ date }) {
                   handleChange={(e) => handleOptions(e, index, item.type)}
                   options={item.options}
                   item={item}
-                
                 />
               </div>
             </div>
