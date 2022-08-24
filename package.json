@@ -2,6 +2,7 @@
   "name": "newproject",
   "version": "0.1.0",
   "private": true,
+  "proxy": "https://3fc4-2402-3a80-1fa7-7669-40ef-8373-1157-20f9.in.ngrok.io",
   "dependencies": {
     "@emotion/react": "^11.10.0",
     "@emotion/styled": "^11.10.0",

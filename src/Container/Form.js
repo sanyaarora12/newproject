@@ -73,26 +73,46 @@ export default function Form({ date }) {
 
   const apiSubmit = (request) => {
     console.log("came here");
-    axios
-      .post(
-        "https://3fc4-2402-3a80-1fa7-7669-40ef-8373-1157-20f9.in.ngrok.io/api/form-submissions-full",
-        request,
-        {
-          headers: {
-            "access-Control-Allow-Origin": true,
-            'access-Control-Allow-Methods': 'POST',
-            Origin:
-              "https://jio-clickstream-product-suggestion.extensions.jiox0.de",
-              
-          },
-        }
-      )
-      .then((res) => {
-        console.log(res.data);
-        setButtonPopup(true);
-       
+
+    fetch("/api/form-submissions-full", {
+      method: "POST",
+      mode: "cors", // no-cors, *cors, same-origin
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers": "*",
+        Accept: "*/*",
+      },
+      body: JSON.stringify(request), // body data type must match "Content-Type" header
+    })
+      .then((response) => {
+        console.log(response.json());
       })
-      .catch((err) => console.error(err));
+      .catch((error) => {
+        console.log(error)
+      }
+      );
+    // axios
+    //   .post(
+    //     "https://3fc4-2402-3a80-1fa7-7669-40ef-8373-1157-20f9.in.ngrok.io/api/form-submissions-full",
+    //     request,
+    //     {
+    //       headers: {
+    //         "access-Control-Allow-Origin": true,
+    //         'access-Control-Allow-Methods': 'POST',
+    //         Origin:
+    //           "https://jio-clickstream-product-suggestion.extensions.jiox0.de",
+              
+    //       },
+    //     }
+    //   )
+    //   .then((res) => {
+    //     console.log(res.data);
+    //     setButtonPopup(true);
+       
+    //   })
+    //   .catch((err) => console.error(err));
+
   };
 
   useEffect(() => {
