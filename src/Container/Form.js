@@ -16,11 +16,7 @@ import Dropdown from "../Components/Dropdown/Dropdown";
 export default function Form({ date }) {
   let { id } = useParams();
   let navigate = useNavigate();
-  const [formValues, setFormValues] = useState({
-    ContactNumber: "",
-    ContactMail: "",
-    Name: "",
-  });
+  // const [form, setform] = useState({});
 
   const [form, setForm] = useState({});
   const [buttonPopup, setButtonPopup] = useState(false);
@@ -52,7 +48,8 @@ export default function Form({ date }) {
     };
 
     let formFields = [];
-    formValues.formId.fields.forEach((element) => {
+    console.log(form)
+    form.formId.fields.forEach((element) => {
       const obj = {
         valueStr: element.valueInput,
         fieldKey: {
@@ -63,9 +60,9 @@ export default function Form({ date }) {
     });
     const request = {
       fields: formFields,
-      formKey: { id: formValues.formId.id },
+      formKey: { id: form.formId.id },
     };
-    console.log(formValues);
+    console.log(form);
     console.log(request);
 
     apiSubmit(request);
@@ -76,49 +73,29 @@ export default function Form({ date }) {
 
     fetch("/api/form-submissions-full", {
       method: "POST",
-      mode: "cors", // no-cors, *cors, same-origin
+      mode: "cors", 
       headers: {
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Headers": "*",
         Accept: "*/*",
       },
-      body: JSON.stringify(request), // body data type must match "Content-Type" header
+      body: JSON.stringify(request), 
     })
       .then((response) => {
         console.log(response.json());
+        setButtonPopup(true)
       })
-      .catch((error) => {
-        console.log(error)
-      }
-      );
-    // axios
-    //   .post(
-    //     "https://3fc4-2402-3a80-1fa7-7669-40ef-8373-1157-20f9.in.ngrok.io/api/form-submissions-full",
-    //     request,
-    //     {
-    //       headers: {
-    //         "access-Control-Allow-Origin": true,
-    //         'access-Control-Allow-Methods': 'POST',
-    //         Origin:
-    //           "https://jio-clickstream-product-suggestion.extensions.jiox0.de",
-              
-    //       },
-    //     }
-    //   )
-    //   .then((res) => {
-    //     console.log(res.data);
-    //     setButtonPopup(true);
-       
-    //   })
-    //   .catch((err) => console.error(err));
-
+      .catch((err) => {
+        console.log(err.res.status);
+        if (err.res.status === 404) {
+          navigate("/Page404");
+          return;
+        }
+      });
   };
 
   useEffect(() => {
-    // we will call an api here
-    // have to get form id from url and have to pass in this func
-
     fetchPromotionDetails(id).then((temp) => {
       console.log(temp, "mounted");
       setForm(temp);
@@ -126,7 +103,7 @@ export default function Form({ date }) {
   }, []);
 
   const fetchPromotionDetails = async (id) => {
-    // you will call AN api here and will return the updated response
+  
 
     const resp = await axios.get(
       `https://jio-clickstream-product-suggestion.extensions.jiox0.de/api/promotions/url/jddefghtj${id}/full`
@@ -170,7 +147,7 @@ export default function Form({ date }) {
       .filter((val) => val.isSelected)
       .map((p) => p.valueStr)
       .join(",");
-    // debugger
+    
     return temp;
   };
   const handleOptions = (e, n, type = "", optionIndex = null) => {
@@ -184,7 +161,7 @@ export default function Form({ date }) {
         updatedValue.formId.fields[n].options
       );
     }
- 
+
     else if (type === "SelectBox" || type === "RadioGroup") {
       const currentOptions = updatedValue.formId.fields[n].options;
       optionIndex = currentOptions.findIndex(
@@ -200,7 +177,7 @@ export default function Form({ date }) {
       });
     }
     console.log(updatedValue, "updatedvalue");
-    setFormValues(updatedValue);
+    setForm(updatedValue);
     console.log(updatedValue.formId.fields[n].valueInput);
   };
 
@@ -233,10 +210,21 @@ export default function Form({ date }) {
     }
     updatedValue[n] = e.target.value;
     console.log(updatedValue, "updatedvalue");
-    setFormValues(updatedValue);
+    setForm(updatedValue);
     console.log(updatedValue.formId.fields[n].valueInput);
   };
 
+  const handleDisable=()=>{
+   const mandatoryArr= form?.formId?.fields.filter((val)=>val.isMandatory ) || [] 
+   if(mandatoryArr.some((ele)=>ele.valueInput==""))
+   return true
+   
+   else if(form?.formId?.fields.some((val)=>val.showError))
+   return true
+   else
+   return false
+  }
+ 
   const result = () => {
     let final = [];
 
@@ -436,13 +424,14 @@ export default function Form({ date }) {
             <Button
               type="submit"
               fullWidth
+              disabled={handleDisable()}
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
               onClick={onSubmit}
             >
               SUBMIT
             </Button>
-
+           <button onClick={()=>console.log(form,handleDisable())}>Click</button>
             <Popup trigger={buttonPopup} setTrigger={setButtonPopup} />
           </Box>
         </Paper>
