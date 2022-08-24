@@ -232,7 +232,7 @@ export default function Form({ date }) {
       switch (String(item.type)) {
         case "ContactNumber":
           final.push(
-            <div style={{ marginBottom: "20px" }}>
+            <div style={{ marginBottom: "40px" }}>
               <label>
                 <strong>{item.key}</strong>
               </label>
@@ -252,7 +252,7 @@ export default function Form({ date }) {
           break;
         case "ContactMail":
           final.push(
-            <div style={{ marginBottom: "20px" }}>
+            <div style={{ marginBottom: "40px" }}>
               <label>
                 <strong>{item.key}</strong>
               </label>
@@ -295,7 +295,7 @@ export default function Form({ date }) {
           break;
         case "DateBox":
           final.push(
-            <div style={{ marginBottom: "20px" }}>
+            <div style={{ marginBottom: "40px" }}>
               <label>
                 <strong>{item.key}</strong>
               </label>
@@ -431,7 +431,7 @@ export default function Form({ date }) {
             >
               SUBMIT
             </Button>
-           <button onClick={()=>console.log(form,handleDisable())}>Click</button>
+           
             <Popup trigger={buttonPopup} setTrigger={setButtonPopup} />
           </Box>
         </Paper>
