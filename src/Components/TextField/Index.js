@@ -9,7 +9,6 @@ export default function Inputs(handleChange,key) {
        variant="outlined"
        onChange={(e) => handleChange(e, key)}
       />
-      
-    
+
   );
 }

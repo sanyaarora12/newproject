@@ -11,17 +11,11 @@ function Popup(props) {
         </button> */}
         {props.children}
         <h5>Form submitted successfully</h5>
-        
+
         <button className="btn1">
-            <Link to="/">
-        Go to home
-        </Link>
-      </button>
-      <button className="btn2"  onClick={() => props.setTrigger(false)}>
-      
-        Submit again
-     
-      </button>
+          <Link to="/">Go to home</Link>
+        </button>
+       
       </div>
     </div>
   ) : (

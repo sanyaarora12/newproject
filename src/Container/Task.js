@@ -7,17 +7,20 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 function App() {
   const [showform, setShowform] = useState(false);
+
   const [card, setCard] = useState([]);
 
   let navigate = useNavigate();
   
   useEffect(() => {
+  
     axios
       .get(
         "https://jio-clickstream-product-suggestion.extensions.jiox0.de/api/promotions?page=1&size=1&sort=id,desc"
       )
       .then((res) => {
         setCard(res.data);
+        
       })
       .catch((err) => {
         console.log(err);
@@ -56,17 +59,17 @@ function App() {
             aria-label="Slide 3"
           ></button>
         </div>
-        <div class="carousel-inner">
+        <div class="carousel-inner" style={{justifyContent:"center"}}>
           {card.map((cards) => (
-            <div class="carousel-item active" id="car">
+            <div class="carousel-item active" id="car" >
               <Link to={`/${cards.id}`}>
                 <img
                   src={cards.desktopImageUrl}
-                  class="d-block w-80 "
+                  class="d-block w-80"
                   marginLeft="200px"
                   alt="..."
                   onClick={() => setShowform(true)}
-                  // onClick={handleClick}
+                 
                 />
               </Link>
               <br />

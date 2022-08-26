@@ -6,7 +6,6 @@ import RadioButton from "../Components/RadioButton/RadioButton";
 import Checkboxes from "../Components/Checkbox/Checkboxes";
 import Box from "@mui/material/Box";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import DatePickers from "../Components/DatePicker/DatePickers";
 import Popup from "./Popup";
 import axios from "axios";
 import { useParams } from "react-router-dom";
@@ -16,8 +15,6 @@ import Dropdown from "../Components/Dropdown/Dropdown";
 export default function Form({ date }) {
   let { id } = useParams();
   let navigate = useNavigate();
-  // const [form, setform] = useState({});
-
   const [form, setForm] = useState({});
   const [buttonPopup, setButtonPopup] = useState(false);
 
@@ -48,7 +45,7 @@ export default function Form({ date }) {
     };
 
     let formFields = [];
-    console.log(form)
+    console.log(form);
     form.formId.fields.forEach((element) => {
       const obj = {
         valueStr: element.valueInput,
@@ -73,18 +70,18 @@ export default function Form({ date }) {
 
     fetch("/api/form-submissions-full", {
       method: "POST",
-      mode: "cors", 
+      mode: "cors",
       headers: {
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Headers": "*",
         Accept: "*/*",
       },
-      body: JSON.stringify(request), 
+      body: JSON.stringify(request),
     })
       .then((response) => {
         console.log(response.json());
-        setButtonPopup(true)
+        setButtonPopup(true);
       })
       .catch((err) => {
         console.log(err.res.status);
@@ -97,14 +94,12 @@ export default function Form({ date }) {
 
   useEffect(() => {
     fetchPromotionDetails(id).then((temp) => {
-      console.log(temp, "mounted");
+      console.log(temp);
       setForm(temp);
     });
   }, []);
 
   const fetchPromotionDetails = async (id) => {
-  
-
     const resp = await axios.get(
       `https://jio-clickstream-product-suggestion.extensions.jiox0.de/api/promotions/url/jddefghtj${id}/full`
     );
@@ -147,7 +142,7 @@ export default function Form({ date }) {
       .filter((val) => val.isSelected)
       .map((p) => p.valueStr)
       .join(",");
-    
+
     return temp;
   };
   const handleOptions = (e, n, type = "", optionIndex = null) => {
@@ -160,9 +155,7 @@ export default function Form({ date }) {
       updatedValue.formId.fields[n].valueInput = checkBoxFields(
         updatedValue.formId.fields[n].options
       );
-    }
-
-    else if (type === "SelectBox" || type === "RadioGroup") {
+    } else if (type === "SelectBox" || type === "RadioGroup") {
       const currentOptions = updatedValue.formId.fields[n].options;
       optionIndex = currentOptions.findIndex(
         (val) => val.title === e.target.value
@@ -214,17 +207,14 @@ export default function Form({ date }) {
     console.log(updatedValue.formId.fields[n].valueInput);
   };
 
-  const handleDisable=()=>{
-   const mandatoryArr= form?.formId?.fields.filter((val)=>val.isMandatory ) || [] 
-   if(mandatoryArr.some((ele)=>ele.valueInput==""))
-   return true
-   
-   else if(form?.formId?.fields.some((val)=>val.showError))
-   return true
-   else
-   return false
-  }
- 
+  const handleDisable = () => {
+    const mandatoryArr =
+      form?.formId?.fields.filter((val) => val.isMandatory) || [];
+    if (mandatoryArr.some((ele) => ele.valueInput == "")) return true;
+    else if (form?.formId?.fields.some((val) => val.showError)) return true;
+    else return false;
+  };
+
   const result = () => {
     let final = [];
 
@@ -259,7 +249,6 @@ export default function Form({ date }) {
               <br />
               <TextField
                 type="text"
-                required
                 fullWidth
                 label={item.type}
                 onChange={(e) => handleChange(e, index, item.type)}
@@ -315,7 +304,8 @@ export default function Form({ date }) {
               <label>
                 <strong>{item.key}</strong>
               </label>
-              <div>
+              <br />
+              <div style={{ display: "flex" }}>
                 <RadioButton
                   handleChange={(e) => handleOptions(e, index, item.type)}
                   options={item.options}
@@ -327,13 +317,16 @@ export default function Form({ date }) {
           break;
         case "MultiCheckBox":
           final.push(
-            <label>
-              <strong>{item.key}</strong>
-            </label>
+            <div>
+              <label>
+                <strong>{item.key}</strong>
+              </label>
+              <br />
+            </div>
           );
           item.options.map((multicheckbox, optionIndex) => {
             final.push(
-              <div>
+              <div style={{ display: "inline-flex" }}>
                 <Checkboxes
                   handleChange={(e) =>
                     handleOptions(e, index, item.type, optionIndex)
@@ -348,13 +341,17 @@ export default function Form({ date }) {
           break;
         case "SingleCheckBox":
           final.push(
-            <label>
-              <strong>{item.key}</strong>
-            </label>
+            <div>
+              <br />
+              <label>
+                <strong>{item.key}</strong>
+              </label>
+              <br />
+            </div>
           );
           item.options.map((singlecheckbox, optionIndex) => {
             final.push(
-              <div>
+              <div style={{ display: "inline-flex" }}>
                 <Checkboxes
                   handleChange={(e) =>
                     handleOptions(e, index, item.type, optionIndex)
@@ -423,7 +420,11 @@ export default function Form({ date }) {
             </Box>
             <Button
               type="submit"
-              fullWidth
+              style={{
+                marginLeft: "-420px",
+                marginTop: "50px",
+                width: "120px",
+              }}
               disabled={handleDisable()}
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
@@ -431,7 +432,7 @@ export default function Form({ date }) {
             >
               SUBMIT
             </Button>
-           
+
             <Popup trigger={buttonPopup} setTrigger={setButtonPopup} />
           </Box>
         </Paper>
