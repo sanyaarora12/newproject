@@ -151,7 +151,6 @@ export default function Form({ date }) {
     if (type === "MultiCheckBox" || type === "SingleCheckBox") {
       updatedValue.formId.fields[n].options[optionIndex].isSelected =
         e.target.checked;
-
       updatedValue.formId.fields[n].valueInput = checkBoxFields(
         updatedValue.formId.fields[n].options
       );

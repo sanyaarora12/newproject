@@ -15,11 +15,14 @@ export default function RadioButton({
     <FormControl>
       <RadioGroup
         sx={{
-          '& .MuiSvgIcon-root': {
+          "& .MuiSvgIcon-root": {
             fontSize: 22,
-            marginTop:"5px"
+           
+            marginTop: "5px",
+            margin: "5px",
           },
         }}
+        row
         aria-labelledby="demo-radio-buttons-group-label"
         defaultValue="female"
         name="radio-buttons-group"
@@ -28,7 +31,18 @@ export default function RadioButton({
       >
         {options.map((ele) => {
           return (
-            <div style={{ display: "flex" }}>
+            <div
+              style={{
+                display: "flex",
+               
+                border: "1px grey solid",
+                borderRadius: "5px",
+                paddingLeft: "10px",
+                paddingRight: "10px",
+                margin: "5px",
+                width: "150px"
+              }}
+            >
               <div>
                 <FormControlLabel control={<Radio />} value={ele.title}>
                   {ele.title}
@@ -39,9 +53,9 @@ export default function RadioButton({
                 <FormLabel
                   style={{
                     color: "black",
-                    marginTop:"12px",
-                    fontSize:17,
-                    marginLeft:"-12px"
+                    marginTop: "12px",
+                    fontSize: 17,
+                    marginLeft: "-12px",
                   }}
                   id="demo-radio-buttons-group-label"
                 >
