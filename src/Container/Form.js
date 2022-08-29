@@ -388,7 +388,7 @@ export default function Form({ date }) {
   };
 
   const theme = createTheme();
-  const paperStyle = { padding: 20, height: "auto", width: 600 };
+  const paperStyle = { padding: 20, height: "auto", width: 700 };
 
   return (
     <ThemeProvider theme={theme}>
@@ -397,7 +397,7 @@ export default function Form({ date }) {
 
         <Paper elevation={10} style={paperStyle}>
           <Grid align="center">
-            <h3 style={{ marginLeft: "-450px" }}>
+            <h3 style={{ marginLeft: "-600px" }}>
               <u>Form</u>
               <br />
               <br />
@@ -420,9 +420,9 @@ export default function Form({ date }) {
             <Button
               type="submit"
               style={{
-                marginLeft: "-420px",
-                marginTop: "50px",
-                width: "120px",
+                // marginLeft: "-470px",
+                 marginTop: "50px",
+                width: "150px",
               }}
               disabled={handleDisable()}
               variant="contained"
